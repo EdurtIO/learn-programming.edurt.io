@@ -2,6 +2,27 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://learn-spring.incubator.edurt.io/2020/05/31/DataJPA/datajpa-redis-datajpa.html</loc>
+    
+    <lastmod>2020-05-31T05:12:34.848Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://learn-spring.incubator.edurt.io/2020/05/31/DataJPA/datajpa-redis-template.html</loc>
+    
+    <lastmod>2020-05-31T05:11:12.540Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://learn-spring.incubator.edurt.io/2020/05/31/DataJPA/datajpa-redis-basic.html</loc>
+    
+    <lastmod>2020-05-31T05:10:08.386Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://learn-spring.incubator.edurt.io/2020/05/09/DataJPA/datajpa-mongodb-template.html</loc>
     
     <lastmod>2020-05-09T11:11:02.364Z</lastmod>
