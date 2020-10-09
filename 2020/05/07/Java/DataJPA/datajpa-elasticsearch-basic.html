@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     
-    <title>Spring DataJPA ElasticSearch教程(基础版) | 一起学编程</title>
+    <title>整合ElasticSearch教程(基础版) | 一起学编程</title>
     
     
         <meta name="keywords" content="DataJPA,ElasticSearch" />
@@ -11,13 +11,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <meta name="description" content="本教程主要详细讲解Spring Data ElasticSearch,它向ElasticSearch提供Spring Data平台的抽象. ElasticSearch是基于文档的存储,以持久保存数据,并可用作数据库,缓存,消息代理等. 我们通过以下几个步骤进行讲解:  基础环境 创建项目 配置支持ElasticSearch 操作ElasticSearch数据 打包文件部署  基础环境    技术">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Spring DataJPA ElasticSearch教程(基础版)">
-<meta property="og:url" content="https://learn-programming.edurt.io/2020/05/07/DataJPA/datajpa-elasticsearch-basic.html">
+<meta property="og:title" content="整合ElasticSearch教程(基础版)">
+<meta property="og:url" content="https://learn-programming.edurt.io/2020/05/07/Java/DataJPA/datajpa-elasticsearch-basic.html">
 <meta property="og:site_name" content="一起学编程">
 <meta property="og:description" content="本教程主要详细讲解Spring Data ElasticSearch,它向ElasticSearch提供Spring Data平台的抽象. ElasticSearch是基于文档的存储,以持久保存数据,并可用作数据库,缓存,消息代理等. 我们通过以下几个步骤进行讲解:  基础环境 创建项目 配置支持ElasticSearch 操作ElasticSearch数据 打包文件部署  基础环境    技术">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-05-07T15:46:05.000Z">
-<meta property="article:modified_time" content="2020-05-08T06:51:51.280Z">
+<meta property="article:modified_time" content="2020-10-09T10:35:01.295Z">
 <meta property="article:author" content="edurtio">
 <meta property="article:tag" content="DataJPA">
 <meta property="article:tag" content="ElasticSearch">
@@ -184,9 +184,27 @@
                         <a href="#" data-role="directory">
                             <i class="fa fa-folder-open"></i>
                             &nbsp;
+                            Java
+                        </a>
+                         <ul class="unstyled" id="tree" > 
+                    <li class="directory open">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder-open"></i>
+                            &nbsp;
                             DataJPA
                         </a>
-                         <ul class="unstyled" id="tree" >  <li class="file active"><a href="/2020/05/07/DataJPA/datajpa-elasticsearch-basic.html">Spring DataJPA ElasticSearch教程(基础版)</a></li>  <li class="file"><a href="/2020/05/08/DataJPA/datajpa-jdbc-basic.html">Spring DataJPA JDBC教程(基础版)</a></li>  <li class="file"><a href="/2020/05/08/DataJPA/datajpa-mongodb-basic.html">Spring DataJPA MongoDB教程(基础版)</a></li>  <li class="file"><a href="/2020/05/09/DataJPA/datajpa-mongodb-template.html">Spring DataJPA MongoDB Template教程</a></li>  </ul> 
+                         <ul class="unstyled" id="tree" >  <li class="file active"><a href="/2020/05/07/Java/DataJPA/datajpa-elasticsearch-basic.html">整合ElasticSearch教程(基础版)</a></li>  <li class="file"><a href="/2020/05/08/Java/DataJPA/datajpa-jdbc-basic.html">整合JDBC教程(基础版)</a></li>  <li class="file"><a href="/2020/05/08/Java/DataJPA/datajpa-mongodb-basic.html">整合MongoDB教程(基础版)</a></li>  <li class="file"><a href="/2020/05/09/Java/DataJPA/datajpa-mongodb-template.html">整合MongoDB教程(Template版)</a></li>  <li class="file"><a href="/2020/05/31/Java/DataJPA/datajpa-redis-basic.html">整合Redis教程(基础版)</a></li>  <li class="file"><a href="/2020/05/31/Java/DataJPA/datajpa-redis-template.html">整合Redis教程(Template版)</a></li>  <li class="file"><a href="/2020/05/31/Java/DataJPA/datajpa-redis-datajpa.html">整合Redis教程(JPA实战版)</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Guice
+                        </a>
+                         <ul class="unstyled" id="tree" >  <li class="file"><a href="/2020/10/09/Java/Guice/binder-multiple.html">Guice依赖注入(基础版)</a></li>  <li class="file"><a href="/2020/10/09/Java/Guice/guice-binder.html">Guice依赖注入(构造函数注入)</a></li>  <li class="file"><a href="/2020/10/09/Java/Guice/binder-constructor.html">Guice依赖注入(接口多实现)</a></li>  </ul> 
+                    </li> 
+                     </ul> 
                     </li> 
                     
                     <li class="directory">
@@ -280,7 +298,7 @@
     <div id="toTop" class="fa fa-angle-up"></div>
 </aside>
             
-            <section id="main"><article id="post-DataJPA/datajpa-elasticsearch-basic" class="article article-type-post" itemscope itemprop="blogPost">
+            <section id="main"><article id="post-Java/DataJPA/datajpa-elasticsearch-basic" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
         
@@ -290,7 +308,7 @@
                         
     <div class="article-category">
     	<i class="fa fa-folder"></i>
-        <a class="article-category-link" href="/categories/DataJPA/">DataJPA</a>
+        <a class="article-category-link" href="/categories/Java/">Java</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/Java/DataJPA/">DataJPA</a>
     </div>
 
                         
@@ -302,7 +320,7 @@
                         
     <div class="article-date">
         <i class="fa fa-calendar"></i>
-        <a href="/2020/05/07/DataJPA/datajpa-elasticsearch-basic.html">
+        <a href="/2020/05/07/Java/DataJPA/datajpa-elasticsearch-basic.html">
             <time datetime="2020-05-07T15:46:05.000Z" itemprop="datePublished">2020-05-07</time>
         </a>
     </div>
@@ -314,13 +332,13 @@
                         
                         
                             <div class="article-meta-button">
-                                <a href='https://github.com/qianmoQ/incubator-learn-spring/raw/master/source/_posts/DataJPA/datajpa-elasticsearch-basic.md' target="_blank" rel="noopener"> 源文件 </a>
+                                <a href='https://github.com/qianmoQ/incubator-learn-spring/raw/master/source/_posts/Java/DataJPA/datajpa-elasticsearch-basic.md' target="_blank" rel="noopener"> 源文件 </a>
                             </div>
                             <div class="article-meta-button">
-                                <a href='https://github.com/qianmoQ/incubator-learn-spring/edit/master/source/_posts/DataJPA/datajpa-elasticsearch-basic.md' target="_blank" rel="noopener"> 修改 </a>
+                                <a href='https://github.com/qianmoQ/incubator-learn-spring/edit/master/source/_posts/Java/DataJPA/datajpa-elasticsearch-basic.md' target="_blank" rel="noopener"> 修改 </a>
                             </div>
                             <div class="article-meta-button">
-                                <a href='https://github.com/qianmoQ/incubator-learn-spring/commits/master/source/_posts/DataJPA/datajpa-elasticsearch-basic.md' target="_blank" rel="noopener"> 历史记录 </a>
+                                <a href='https://github.com/qianmoQ/incubator-learn-spring/commits/master/source/_posts/Java/DataJPA/datajpa-elasticsearch-basic.md' target="_blank" rel="noopener"> 历史记录 </a>
                             </div>
                         
                     </div>
@@ -328,7 +346,7 @@
                 
     
         <h1 class="article-title" itemprop="name">
-            Spring DataJPA ElasticSearch教程(基础版)
+            整合ElasticSearch教程(基础版)
         </h1>
     
 
@@ -551,11 +569,11 @@
     
 <nav id="article-nav">
     
-        <a href="/2020/05/08/DataJPA/datajpa-jdbc-basic.html" id="article-nav-newer" class="article-nav-link-wrap">
+        <a href="/2020/05/08/Java/DataJPA/datajpa-jdbc-basic.html" id="article-nav-newer" class="article-nav-link-wrap">
             <strong class="article-nav-caption">上一篇</strong>
             <div class="article-nav-title">
                 
-                    Spring DataJPA JDBC教程(基础版)
+                    整合JDBC教程(基础版)
                 
             </div>
         </a>

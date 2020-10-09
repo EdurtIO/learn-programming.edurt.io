@@ -2,30 +2,72 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://learn-programming.edurt.io/2020/05/09/DataJPA/datajpa-mongodb-template.html</loc>
+    <loc>https://learn-programming.edurt.io/2020/10/09/Java/Guice/binder-constructor.html</loc>
     
-    <lastmod>2020-05-09T11:11:02.364Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://learn-programming.edurt.io/2020/05/08/DataJPA/datajpa-mongodb-basic.html</loc>
-    
-    <lastmod>2020-05-08T06:51:51.288Z</lastmod>
+    <lastmod>2020-10-09T10:55:35.286Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://learn-programming.edurt.io/2020/05/08/DataJPA/datajpa-jdbc-basic.html</loc>
+    <loc>https://learn-programming.edurt.io/2020/10/09/Java/Guice/guice-binder.html</loc>
     
-    <lastmod>2020-05-08T06:51:51.286Z</lastmod>
+    <lastmod>2020-10-09T10:53:53.183Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://learn-programming.edurt.io/2020/05/07/DataJPA/datajpa-elasticsearch-basic.html</loc>
+    <loc>https://learn-programming.edurt.io/2020/10/09/Java/Guice/binder-multiple.html</loc>
     
-    <lastmod>2020-05-08T06:51:51.280Z</lastmod>
+    <lastmod>2020-10-09T10:36:48.518Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://learn-programming.edurt.io/2020/05/31/Java/DataJPA/datajpa-redis-datajpa.html</loc>
+    
+    <lastmod>2020-10-09T10:35:01.414Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://learn-programming.edurt.io/2020/05/31/Java/DataJPA/datajpa-redis-template.html</loc>
+    
+    <lastmod>2020-10-09T10:35:01.409Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://learn-programming.edurt.io/2020/05/08/Java/DataJPA/datajpa-mongodb-basic.html</loc>
+    
+    <lastmod>2020-10-09T10:35:01.404Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://learn-programming.edurt.io/2020/05/31/Java/DataJPA/datajpa-redis-basic.html</loc>
+    
+    <lastmod>2020-10-09T10:35:01.399Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://learn-programming.edurt.io/2020/05/09/Java/DataJPA/datajpa-mongodb-template.html</loc>
+    
+    <lastmod>2020-10-09T10:35:01.394Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://learn-programming.edurt.io/2020/05/08/Java/DataJPA/datajpa-jdbc-basic.html</loc>
+    
+    <lastmod>2020-10-09T10:35:01.382Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://learn-programming.edurt.io/2020/05/07/Java/DataJPA/datajpa-elasticsearch-basic.html</loc>
+    
+    <lastmod>2020-10-09T10:35:01.295Z</lastmod>
     
   </url>
   
@@ -37,14 +79,14 @@
   </url>
   
   <url>
-    <loc>https://learn-programming.edurt.io/about/index.html</loc>
+    <loc>https://learn-programming.edurt.io/categories/index.html</loc>
     
     <lastmod>2020-05-08T02:40:39.788Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://learn-programming.edurt.io/categories/index.html</loc>
+    <loc>https://learn-programming.edurt.io/about/index.html</loc>
     
     <lastmod>2020-05-08T02:40:39.788Z</lastmod>
     

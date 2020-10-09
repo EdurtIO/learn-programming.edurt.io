@@ -183,9 +183,27 @@
                         <a href="#" data-role="directory">
                             <i class="fa fa-folder"></i>
                             &nbsp;
+                            Java
+                        </a>
+                         <ul class="unstyled" id="tree" > 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
                             DataJPA
                         </a>
-                         <ul class="unstyled" id="tree" >  <li class="file"><a href="/2020/05/07/DataJPA/datajpa-elasticsearch-basic.html">Spring DataJPA ElasticSearch教程(基础版)</a></li>  <li class="file"><a href="/2020/05/08/DataJPA/datajpa-jdbc-basic.html">Spring DataJPA JDBC教程(基础版)</a></li>  <li class="file"><a href="/2020/05/08/DataJPA/datajpa-mongodb-basic.html">Spring DataJPA MongoDB教程(基础版)</a></li>  <li class="file"><a href="/2020/05/09/DataJPA/datajpa-mongodb-template.html">Spring DataJPA MongoDB Template教程</a></li>  </ul> 
+                         <ul class="unstyled" id="tree" >  <li class="file"><a href="/2020/05/07/Java/DataJPA/datajpa-elasticsearch-basic.html">整合ElasticSearch教程(基础版)</a></li>  <li class="file"><a href="/2020/05/08/Java/DataJPA/datajpa-jdbc-basic.html">整合JDBC教程(基础版)</a></li>  <li class="file"><a href="/2020/05/08/Java/DataJPA/datajpa-mongodb-basic.html">整合MongoDB教程(基础版)</a></li>  <li class="file"><a href="/2020/05/09/Java/DataJPA/datajpa-mongodb-template.html">整合MongoDB教程(Template版)</a></li>  <li class="file"><a href="/2020/05/31/Java/DataJPA/datajpa-redis-basic.html">整合Redis教程(基础版)</a></li>  <li class="file"><a href="/2020/05/31/Java/DataJPA/datajpa-redis-template.html">整合Redis教程(Template版)</a></li>  <li class="file"><a href="/2020/05/31/Java/DataJPA/datajpa-redis-datajpa.html">整合Redis教程(JPA实战版)</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Guice
+                        </a>
+                         <ul class="unstyled" id="tree" >  <li class="file"><a href="/2020/10/09/Java/Guice/binder-multiple.html">Guice依赖注入(基础版)</a></li>  <li class="file"><a href="/2020/10/09/Java/Guice/guice-binder.html">Guice依赖注入(构造函数注入)</a></li>  <li class="file"><a href="/2020/10/09/Java/Guice/binder-constructor.html">Guice依赖注入(接口多实现)</a></li>  </ul> 
+                    </li> 
+                     </ul> 
                     </li> 
                     
                     <li class="directory">
@@ -280,7 +298,7 @@
 </aside>
             
             <section id="main">
-        <article id="post-DataJPA/datajpa-mongodb-template" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-Java/Guice/binder-constructor" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
         
@@ -290,7 +308,631 @@
                         
     <div class="article-category">
     	<i class="fa fa-folder"></i>
-        <a class="article-category-link" href="/categories/DataJPA/">DataJPA</a>
+        <a class="article-category-link" href="/categories/Java/">Java</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/Java/Guice/">Guice</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/Guice/" rel="tag">Guice</a>, <a class="tag-link" href="/tags/Java/" rel="tag">Java</a>
+    </div>
+
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2020/10/09/Java/Guice/binder-constructor.html">
+            <time datetime="2020-10-09T10:55:14.000Z" itemprop="datePublished">2020-10-09</time>
+        </a>
+    </div>
+
+
+                        
+                            <i class="fa fa-bar-chart"></i>
+                            <span id="busuanzi_container_site_pv"><span id="busuanzi_value_page_pv"></span></span>    
+                        
+                        
+                            <div class="article-meta-button">
+                                <a href='https://github.com/qianmoQ/incubator-learn-spring/raw/master/source/_posts/Java/Guice/binder-constructor.md' target="_blank" rel="noopener"> 源文件 </a>
+                            </div>
+                            <div class="article-meta-button">
+                                <a href='https://github.com/qianmoQ/incubator-learn-spring/edit/master/source/_posts/Java/Guice/binder-constructor.md' target="_blank" rel="noopener"> 修改 </a>
+                            </div>
+                            <div class="article-meta-button">
+                                <a href='https://github.com/qianmoQ/incubator-learn-spring/commits/master/source/_posts/Java/Guice/binder-constructor.md' target="_blank" rel="noopener"> 历史记录 </a>
+                            </div>
+                        
+                    </div>
+                
+                
+    
+        <h1 itemprop="name">
+            <a class="article-title" href="/2020/10/09/Java/Guice/binder-constructor.html">Guice依赖注入(接口多实现)</a>
+        </h1>
+    
+
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+        
+            
+                
+                
+                    
+                    
+                
+                    
+                    
+                
+                    
+                    
+                
+                    
+                    
+                
+                    
+                    
+                
+                
+                    
+                    <p><hr>
+<p>本教程主要详细讲解Guice依赖注入中的特性接口多实现，一般使用到guice的框架的插件机制都是基于该方式实现。</p>
+<h4 id="基础环境"><a href="#基础环境" class="headerlink" title="基础环境"></a>基础环境</h4><hr>
+<table>
+<thead>
+<p>
+                
+            
+        
+        
+            </div>   
+            <div class="article-more-link">
+                <a href="/2020/10/09/Java/Guice/binder-constructor.html#more">查看更多</a>
+            </div>
+        
+        <footer class="article-footer">
+        </footer>
+    </div>
+</article>
+
+
+
+
+
+
+    
+        <article id="post-Java/Guice/guice-binder" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+                    <div class="article-meta">
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/Java/">Java</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/Java/Guice/">Guice</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/Guice/" rel="tag">Guice</a>, <a class="tag-link" href="/tags/Java/" rel="tag">Java</a>
+    </div>
+
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2020/10/09/Java/Guice/guice-binder.html">
+            <time datetime="2020-10-09T10:53:27.000Z" itemprop="datePublished">2020-10-09</time>
+        </a>
+    </div>
+
+
+                        
+                            <i class="fa fa-bar-chart"></i>
+                            <span id="busuanzi_container_site_pv"><span id="busuanzi_value_page_pv"></span></span>    
+                        
+                        
+                            <div class="article-meta-button">
+                                <a href='https://github.com/qianmoQ/incubator-learn-spring/raw/master/source/_posts/Java/Guice/guice-binder.md' target="_blank" rel="noopener"> 源文件 </a>
+                            </div>
+                            <div class="article-meta-button">
+                                <a href='https://github.com/qianmoQ/incubator-learn-spring/edit/master/source/_posts/Java/Guice/guice-binder.md' target="_blank" rel="noopener"> 修改 </a>
+                            </div>
+                            <div class="article-meta-button">
+                                <a href='https://github.com/qianmoQ/incubator-learn-spring/commits/master/source/_posts/Java/Guice/guice-binder.md' target="_blank" rel="noopener"> 历史记录 </a>
+                            </div>
+                        
+                    </div>
+                
+                
+    
+        <h1 itemprop="name">
+            <a class="article-title" href="/2020/10/09/Java/Guice/guice-binder.html">Guice依赖注入(构造函数注入)</a>
+        </h1>
+    
+
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+        
+            
+                
+                
+                    
+                    
+                
+                    
+                    
+                
+                    
+                    
+                
+                    
+                    
+                
+                    
+                    
+                
+                
+                    
+                    <p><hr>
+<p>本教程主要详细讲解Guice的构造函数注入.</p>
+<h4 id="基础环境"><a href="#基础环境" class="headerlink" title="基础环境"></a>基础环境</h4><hr>
+<table>
+<thead>
+<p>
+                
+            
+        
+        
+            </div>   
+            <div class="article-more-link">
+                <a href="/2020/10/09/Java/Guice/guice-binder.html#more">查看更多</a>
+            </div>
+        
+        <footer class="article-footer">
+        </footer>
+    </div>
+</article>
+
+
+
+
+
+
+    
+        <article id="post-Java/Guice/binder-multiple" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+                    <div class="article-meta">
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/Java/">Java</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/Java/Guice/">Guice</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/Guice/" rel="tag">Guice</a>, <a class="tag-link" href="/tags/Java/" rel="tag">Java</a>
+    </div>
+
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2020/10/09/Java/Guice/binder-multiple.html">
+            <time datetime="2020-10-09T10:36:09.000Z" itemprop="datePublished">2020-10-09</time>
+        </a>
+    </div>
+
+
+                        
+                            <i class="fa fa-bar-chart"></i>
+                            <span id="busuanzi_container_site_pv"><span id="busuanzi_value_page_pv"></span></span>    
+                        
+                        
+                            <div class="article-meta-button">
+                                <a href='https://github.com/qianmoQ/incubator-learn-spring/raw/master/source/_posts/Java/Guice/binder-multiple.md' target="_blank" rel="noopener"> 源文件 </a>
+                            </div>
+                            <div class="article-meta-button">
+                                <a href='https://github.com/qianmoQ/incubator-learn-spring/edit/master/source/_posts/Java/Guice/binder-multiple.md' target="_blank" rel="noopener"> 修改 </a>
+                            </div>
+                            <div class="article-meta-button">
+                                <a href='https://github.com/qianmoQ/incubator-learn-spring/commits/master/source/_posts/Java/Guice/binder-multiple.md' target="_blank" rel="noopener"> 历史记录 </a>
+                            </div>
+                        
+                    </div>
+                
+                
+    
+        <h1 itemprop="name">
+            <a class="article-title" href="/2020/10/09/Java/Guice/binder-multiple.html">Guice依赖注入(基础版)</a>
+        </h1>
+    
+
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+        
+            
+                
+                
+                    
+                    
+                
+                    
+                    
+                
+                    
+                    
+                
+                    
+                    
+                
+                    
+                    
+                
+                
+                    
+                    <p><hr>
+<p>本教程主要详细讲解Guice的一些基本注入方式,通过该简单教程让我们可以快速使用Guice进行简单系统化开发,后续我们会更深入讲解更多模块,如果还不了解Guice大家可以先去网上自行了解一下.</p>
+<h4 id="基础环境"><a href="#基础环境" class="headerlink" title="基础环境"></a>基础环境</h4><hr>
+<table>
+<thead>
+<p>
+                
+            
+        
+        
+            </div>   
+            <div class="article-more-link">
+                <a href="/2020/10/09/Java/Guice/binder-multiple.html#more">查看更多</a>
+            </div>
+        
+        <footer class="article-footer">
+        </footer>
+    </div>
+</article>
+
+
+
+
+
+
+    
+        <article id="post-Java/DataJPA/datajpa-redis-datajpa" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+                    <div class="article-meta">
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/Java/">Java</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/Java/DataJPA/">DataJPA</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/DataJPA/" rel="tag">DataJPA</a>, <a class="tag-link" href="/tags/Redis/" rel="tag">Redis</a>
+    </div>
+
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2020/05/31/Java/DataJPA/datajpa-redis-datajpa.html">
+            <time datetime="2020-05-31T05:12:07.000Z" itemprop="datePublished">2020-05-31</time>
+        </a>
+    </div>
+
+
+                        
+                            <i class="fa fa-bar-chart"></i>
+                            <span id="busuanzi_container_site_pv"><span id="busuanzi_value_page_pv"></span></span>    
+                        
+                        
+                            <div class="article-meta-button">
+                                <a href='https://github.com/qianmoQ/incubator-learn-spring/raw/master/source/_posts/Java/DataJPA/datajpa-redis-datajpa.md' target="_blank" rel="noopener"> 源文件 </a>
+                            </div>
+                            <div class="article-meta-button">
+                                <a href='https://github.com/qianmoQ/incubator-learn-spring/edit/master/source/_posts/Java/DataJPA/datajpa-redis-datajpa.md' target="_blank" rel="noopener"> 修改 </a>
+                            </div>
+                            <div class="article-meta-button">
+                                <a href='https://github.com/qianmoQ/incubator-learn-spring/commits/master/source/_posts/Java/DataJPA/datajpa-redis-datajpa.md' target="_blank" rel="noopener"> 历史记录 </a>
+                            </div>
+                        
+                    </div>
+                
+                
+    
+        <h1 itemprop="name">
+            <a class="article-title" href="/2020/05/31/Java/DataJPA/datajpa-redis-datajpa.html">整合Redis教程(JPA实战版)</a>
+        </h1>
+    
+
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+        
+            
+                
+                
+                    
+                    
+                
+                    
+                    
+                
+                    
+                    
+                
+                    
+                    
+                
+                    
+                    
+                
+                
+                    
+                    <p><hr>
+<p>本教程主要详细讲解Spring Data Redis,它向Redis提供Spring Data平台的抽象.</p>
+<p>Redis由基于key/value库的数据结构存数，以持久保存数据，并可用作数据库，缓存，消息代理等。</p>
+<h4 id="基础环境"><a href="#基础环境" class="headerlink" title="基础环境"></a>基础环境</h4><hr>
+<table>
+<p>
+                
+            
+        
+        
+            </div>   
+            <div class="article-more-link">
+                <a href="/2020/05/31/Java/DataJPA/datajpa-redis-datajpa.html#more">查看更多</a>
+            </div>
+        
+        <footer class="article-footer">
+        </footer>
+    </div>
+</article>
+
+
+
+
+
+
+    
+        <article id="post-Java/DataJPA/datajpa-redis-template" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+                    <div class="article-meta">
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/Java/">Java</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/Java/DataJPA/">DataJPA</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/DataJPA/" rel="tag">DataJPA</a>, <a class="tag-link" href="/tags/Redis/" rel="tag">Redis</a>
+    </div>
+
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2020/05/31/Java/DataJPA/datajpa-redis-template.html">
+            <time datetime="2020-05-31T05:10:19.000Z" itemprop="datePublished">2020-05-31</time>
+        </a>
+    </div>
+
+
+                        
+                            <i class="fa fa-bar-chart"></i>
+                            <span id="busuanzi_container_site_pv"><span id="busuanzi_value_page_pv"></span></span>    
+                        
+                        
+                            <div class="article-meta-button">
+                                <a href='https://github.com/qianmoQ/incubator-learn-spring/raw/master/source/_posts/Java/DataJPA/datajpa-redis-template.md' target="_blank" rel="noopener"> 源文件 </a>
+                            </div>
+                            <div class="article-meta-button">
+                                <a href='https://github.com/qianmoQ/incubator-learn-spring/edit/master/source/_posts/Java/DataJPA/datajpa-redis-template.md' target="_blank" rel="noopener"> 修改 </a>
+                            </div>
+                            <div class="article-meta-button">
+                                <a href='https://github.com/qianmoQ/incubator-learn-spring/commits/master/source/_posts/Java/DataJPA/datajpa-redis-template.md' target="_blank" rel="noopener"> 历史记录 </a>
+                            </div>
+                        
+                    </div>
+                
+                
+    
+        <h1 itemprop="name">
+            <a class="article-title" href="/2020/05/31/Java/DataJPA/datajpa-redis-template.html">整合Redis教程(Template版)</a>
+        </h1>
+    
+
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+        
+            
+                
+                
+                    
+                    
+                
+                    
+                    
+                
+                    
+                    
+                
+                    
+                    
+                
+                    
+                    
+                
+                
+                    
+                    <p><hr>
+<p>本教程主要详细讲解Spring Data Redis,它向Redis提供Spring Data平台的抽象.</p>
+<p>Redis由基于key/value库的数据结构存数，以持久保存数据，并可用作数据库，缓存，消息代理等。</p>
+<h4 id="基础环境"><a href="#基础环境" class="headerlink" title="基础环境"></a>基础环境</h4><hr>
+<table>
+<p>
+                
+            
+        
+        
+            </div>   
+            <div class="article-more-link">
+                <a href="/2020/05/31/Java/DataJPA/datajpa-redis-template.html#more">查看更多</a>
+            </div>
+        
+        <footer class="article-footer">
+        </footer>
+    </div>
+</article>
+
+
+
+
+
+
+    
+        <article id="post-Java/DataJPA/datajpa-redis-basic" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+                    <div class="article-meta">
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/Java/">Java</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/Java/DataJPA/">DataJPA</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/DataJPA/" rel="tag">DataJPA</a>, <a class="tag-link" href="/tags/Redis/" rel="tag">Redis</a>
+    </div>
+
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2020/05/31/Java/DataJPA/datajpa-redis-basic.html">
+            <time datetime="2020-05-31T05:09:15.000Z" itemprop="datePublished">2020-05-31</time>
+        </a>
+    </div>
+
+
+                        
+                            <i class="fa fa-bar-chart"></i>
+                            <span id="busuanzi_container_site_pv"><span id="busuanzi_value_page_pv"></span></span>    
+                        
+                        
+                            <div class="article-meta-button">
+                                <a href='https://github.com/qianmoQ/incubator-learn-spring/raw/master/source/_posts/Java/DataJPA/datajpa-redis-basic.md' target="_blank" rel="noopener"> 源文件 </a>
+                            </div>
+                            <div class="article-meta-button">
+                                <a href='https://github.com/qianmoQ/incubator-learn-spring/edit/master/source/_posts/Java/DataJPA/datajpa-redis-basic.md' target="_blank" rel="noopener"> 修改 </a>
+                            </div>
+                            <div class="article-meta-button">
+                                <a href='https://github.com/qianmoQ/incubator-learn-spring/commits/master/source/_posts/Java/DataJPA/datajpa-redis-basic.md' target="_blank" rel="noopener"> 历史记录 </a>
+                            </div>
+                        
+                    </div>
+                
+                
+    
+        <h1 itemprop="name">
+            <a class="article-title" href="/2020/05/31/Java/DataJPA/datajpa-redis-basic.html">整合Redis教程(基础版)</a>
+        </h1>
+    
+
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+        
+            
+                
+                
+                    
+                    
+                
+                    
+                    
+                
+                    
+                    
+                
+                    
+                    
+                
+                    
+                    
+                
+                
+                    
+                    <p><hr>
+<p>本教程主要详细讲解Spring Data Redis,它向Redis提供Spring Data平台的抽象.</p>
+<p>Redis由基于key/value库的数据结构存数，以持久保存数据，并可用作数据库，缓存，消息代理等。</p>
+<h4 id="基础环境"><a href="#基础环境" class="headerlink" title="基础环境"></a>基础环境</h4><hr>
+<table>
+<p>
+                
+            
+        
+        
+            </div>   
+            <div class="article-more-link">
+                <a href="/2020/05/31/Java/DataJPA/datajpa-redis-basic.html#more">查看更多</a>
+            </div>
+        
+        <footer class="article-footer">
+        </footer>
+    </div>
+</article>
+
+
+
+
+
+
+    
+        <article id="post-Java/DataJPA/datajpa-mongodb-template" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+                    <div class="article-meta">
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/Java/">Java</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/Java/DataJPA/">DataJPA</a>
     </div>
 
                         
@@ -302,7 +944,7 @@
                         
     <div class="article-date">
         <i class="fa fa-calendar"></i>
-        <a href="/2020/05/09/DataJPA/datajpa-mongodb-template.html">
+        <a href="/2020/05/09/Java/DataJPA/datajpa-mongodb-template.html">
             <time datetime="2020-05-09T07:39:43.000Z" itemprop="datePublished">2020-05-09</time>
         </a>
     </div>
@@ -314,13 +956,13 @@
                         
                         
                             <div class="article-meta-button">
-                                <a href='https://github.com/qianmoQ/incubator-learn-spring/raw/master/source/_posts/DataJPA/datajpa-mongodb-template.md' target="_blank" rel="noopener"> 源文件 </a>
+                                <a href='https://github.com/qianmoQ/incubator-learn-spring/raw/master/source/_posts/Java/DataJPA/datajpa-mongodb-template.md' target="_blank" rel="noopener"> 源文件 </a>
                             </div>
                             <div class="article-meta-button">
-                                <a href='https://github.com/qianmoQ/incubator-learn-spring/edit/master/source/_posts/DataJPA/datajpa-mongodb-template.md' target="_blank" rel="noopener"> 修改 </a>
+                                <a href='https://github.com/qianmoQ/incubator-learn-spring/edit/master/source/_posts/Java/DataJPA/datajpa-mongodb-template.md' target="_blank" rel="noopener"> 修改 </a>
                             </div>
                             <div class="article-meta-button">
-                                <a href='https://github.com/qianmoQ/incubator-learn-spring/commits/master/source/_posts/DataJPA/datajpa-mongodb-template.md' target="_blank" rel="noopener"> 历史记录 </a>
+                                <a href='https://github.com/qianmoQ/incubator-learn-spring/commits/master/source/_posts/Java/DataJPA/datajpa-mongodb-template.md' target="_blank" rel="noopener"> 历史记录 </a>
                             </div>
                         
                     </div>
@@ -328,7 +970,7 @@
                 
     
         <h1 itemprop="name">
-            <a class="article-title" href="/2020/05/09/DataJPA/datajpa-mongodb-template.html">Spring DataJPA MongoDB Template教程</a>
+            <a class="article-title" href="/2020/05/09/Java/DataJPA/datajpa-mongodb-template.html">整合MongoDB教程(Template版)</a>
         </h1>
     
 
@@ -370,7 +1012,7 @@
         
             </div>   
             <div class="article-more-link">
-                <a href="/2020/05/09/DataJPA/datajpa-mongodb-template.html#more">查看更多</a>
+                <a href="/2020/05/09/Java/DataJPA/datajpa-mongodb-template.html#more">查看更多</a>
             </div>
         
         <footer class="article-footer">
@@ -384,7 +1026,7 @@
 
 
     
-        <article id="post-DataJPA/datajpa-mongodb-basic" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-Java/DataJPA/datajpa-mongodb-basic" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
         
@@ -394,7 +1036,7 @@
                         
     <div class="article-category">
     	<i class="fa fa-folder"></i>
-        <a class="article-category-link" href="/categories/DataJPA/">DataJPA</a>
+        <a class="article-category-link" href="/categories/Java/">Java</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/Java/DataJPA/">DataJPA</a>
     </div>
 
                         
@@ -406,7 +1048,7 @@
                         
     <div class="article-date">
         <i class="fa fa-calendar"></i>
-        <a href="/2020/05/08/DataJPA/datajpa-mongodb-basic.html">
+        <a href="/2020/05/08/Java/DataJPA/datajpa-mongodb-basic.html">
             <time datetime="2020-05-08T06:42:05.000Z" itemprop="datePublished">2020-05-08</time>
         </a>
     </div>
@@ -418,13 +1060,13 @@
                         
                         
                             <div class="article-meta-button">
-                                <a href='https://github.com/qianmoQ/incubator-learn-spring/raw/master/source/_posts/DataJPA/datajpa-mongodb-basic.md' target="_blank" rel="noopener"> 源文件 </a>
+                                <a href='https://github.com/qianmoQ/incubator-learn-spring/raw/master/source/_posts/Java/DataJPA/datajpa-mongodb-basic.md' target="_blank" rel="noopener"> 源文件 </a>
                             </div>
                             <div class="article-meta-button">
-                                <a href='https://github.com/qianmoQ/incubator-learn-spring/edit/master/source/_posts/DataJPA/datajpa-mongodb-basic.md' target="_blank" rel="noopener"> 修改 </a>
+                                <a href='https://github.com/qianmoQ/incubator-learn-spring/edit/master/source/_posts/Java/DataJPA/datajpa-mongodb-basic.md' target="_blank" rel="noopener"> 修改 </a>
                             </div>
                             <div class="article-meta-button">
-                                <a href='https://github.com/qianmoQ/incubator-learn-spring/commits/master/source/_posts/DataJPA/datajpa-mongodb-basic.md' target="_blank" rel="noopener"> 历史记录 </a>
+                                <a href='https://github.com/qianmoQ/incubator-learn-spring/commits/master/source/_posts/Java/DataJPA/datajpa-mongodb-basic.md' target="_blank" rel="noopener"> 历史记录 </a>
                             </div>
                         
                     </div>
@@ -432,7 +1074,7 @@
                 
     
         <h1 itemprop="name">
-            <a class="article-title" href="/2020/05/08/DataJPA/datajpa-mongodb-basic.html">Spring DataJPA MongoDB教程(基础版)</a>
+            <a class="article-title" href="/2020/05/08/Java/DataJPA/datajpa-mongodb-basic.html">整合MongoDB教程(基础版)</a>
         </h1>
     
 
@@ -474,7 +1116,7 @@
         
             </div>   
             <div class="article-more-link">
-                <a href="/2020/05/08/DataJPA/datajpa-mongodb-basic.html#more">查看更多</a>
+                <a href="/2020/05/08/Java/DataJPA/datajpa-mongodb-basic.html#more">查看更多</a>
             </div>
         
         <footer class="article-footer">
@@ -488,7 +1130,7 @@
 
 
     
-        <article id="post-DataJPA/datajpa-jdbc-basic" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-Java/DataJPA/datajpa-jdbc-basic" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
         
@@ -498,7 +1140,7 @@
                         
     <div class="article-category">
     	<i class="fa fa-folder"></i>
-        <a class="article-category-link" href="/categories/DataJPA/">DataJPA</a>
+        <a class="article-category-link" href="/categories/Java/">Java</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/Java/DataJPA/">DataJPA</a>
     </div>
 
                         
@@ -510,7 +1152,7 @@
                         
     <div class="article-date">
         <i class="fa fa-calendar"></i>
-        <a href="/2020/05/08/DataJPA/datajpa-jdbc-basic.html">
+        <a href="/2020/05/08/Java/DataJPA/datajpa-jdbc-basic.html">
             <time datetime="2020-05-08T06:38:26.000Z" itemprop="datePublished">2020-05-08</time>
         </a>
     </div>
@@ -522,13 +1164,13 @@
                         
                         
                             <div class="article-meta-button">
-                                <a href='https://github.com/qianmoQ/incubator-learn-spring/raw/master/source/_posts/DataJPA/datajpa-jdbc-basic.md' target="_blank" rel="noopener"> 源文件 </a>
+                                <a href='https://github.com/qianmoQ/incubator-learn-spring/raw/master/source/_posts/Java/DataJPA/datajpa-jdbc-basic.md' target="_blank" rel="noopener"> 源文件 </a>
                             </div>
                             <div class="article-meta-button">
-                                <a href='https://github.com/qianmoQ/incubator-learn-spring/edit/master/source/_posts/DataJPA/datajpa-jdbc-basic.md' target="_blank" rel="noopener"> 修改 </a>
+                                <a href='https://github.com/qianmoQ/incubator-learn-spring/edit/master/source/_posts/Java/DataJPA/datajpa-jdbc-basic.md' target="_blank" rel="noopener"> 修改 </a>
                             </div>
                             <div class="article-meta-button">
-                                <a href='https://github.com/qianmoQ/incubator-learn-spring/commits/master/source/_posts/DataJPA/datajpa-jdbc-basic.md' target="_blank" rel="noopener"> 历史记录 </a>
+                                <a href='https://github.com/qianmoQ/incubator-learn-spring/commits/master/source/_posts/Java/DataJPA/datajpa-jdbc-basic.md' target="_blank" rel="noopener"> 历史记录 </a>
                             </div>
                         
                     </div>
@@ -536,7 +1178,7 @@
                 
     
         <h1 itemprop="name">
-            <a class="article-title" href="/2020/05/08/DataJPA/datajpa-jdbc-basic.html">Spring DataJPA JDBC教程(基础版)</a>
+            <a class="article-title" href="/2020/05/08/Java/DataJPA/datajpa-jdbc-basic.html">整合JDBC教程(基础版)</a>
         </h1>
     
 
@@ -578,7 +1220,7 @@
         
             </div>   
             <div class="article-more-link">
-                <a href="/2020/05/08/DataJPA/datajpa-jdbc-basic.html#more">查看更多</a>
+                <a href="/2020/05/08/Java/DataJPA/datajpa-jdbc-basic.html#more">查看更多</a>
             </div>
         
         <footer class="article-footer">
@@ -592,7 +1234,7 @@
 
 
     
-        <article id="post-DataJPA/datajpa-elasticsearch-basic" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-Java/DataJPA/datajpa-elasticsearch-basic" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
         
@@ -602,7 +1244,7 @@
                         
     <div class="article-category">
     	<i class="fa fa-folder"></i>
-        <a class="article-category-link" href="/categories/DataJPA/">DataJPA</a>
+        <a class="article-category-link" href="/categories/Java/">Java</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/Java/DataJPA/">DataJPA</a>
     </div>
 
                         
@@ -614,7 +1256,7 @@
                         
     <div class="article-date">
         <i class="fa fa-calendar"></i>
-        <a href="/2020/05/07/DataJPA/datajpa-elasticsearch-basic.html">
+        <a href="/2020/05/07/Java/DataJPA/datajpa-elasticsearch-basic.html">
             <time datetime="2020-05-07T15:46:05.000Z" itemprop="datePublished">2020-05-07</time>
         </a>
     </div>
@@ -626,13 +1268,13 @@
                         
                         
                             <div class="article-meta-button">
-                                <a href='https://github.com/qianmoQ/incubator-learn-spring/raw/master/source/_posts/DataJPA/datajpa-elasticsearch-basic.md' target="_blank" rel="noopener"> 源文件 </a>
+                                <a href='https://github.com/qianmoQ/incubator-learn-spring/raw/master/source/_posts/Java/DataJPA/datajpa-elasticsearch-basic.md' target="_blank" rel="noopener"> 源文件 </a>
                             </div>
                             <div class="article-meta-button">
-                                <a href='https://github.com/qianmoQ/incubator-learn-spring/edit/master/source/_posts/DataJPA/datajpa-elasticsearch-basic.md' target="_blank" rel="noopener"> 修改 </a>
+                                <a href='https://github.com/qianmoQ/incubator-learn-spring/edit/master/source/_posts/Java/DataJPA/datajpa-elasticsearch-basic.md' target="_blank" rel="noopener"> 修改 </a>
                             </div>
                             <div class="article-meta-button">
-                                <a href='https://github.com/qianmoQ/incubator-learn-spring/commits/master/source/_posts/DataJPA/datajpa-elasticsearch-basic.md' target="_blank" rel="noopener"> 历史记录 </a>
+                                <a href='https://github.com/qianmoQ/incubator-learn-spring/commits/master/source/_posts/Java/DataJPA/datajpa-elasticsearch-basic.md' target="_blank" rel="noopener"> 历史记录 </a>
                             </div>
                         
                     </div>
@@ -640,7 +1282,7 @@
                 
     
         <h1 itemprop="name">
-            <a class="article-title" href="/2020/05/07/DataJPA/datajpa-elasticsearch-basic.html">Spring DataJPA ElasticSearch教程(基础版)</a>
+            <a class="article-title" href="/2020/05/07/Java/DataJPA/datajpa-elasticsearch-basic.html">整合ElasticSearch教程(基础版)</a>
         </h1>
     
 
@@ -682,7 +1324,7 @@
         
             </div>   
             <div class="article-more-link">
-                <a href="/2020/05/07/DataJPA/datajpa-elasticsearch-basic.html#more">查看更多</a>
+                <a href="/2020/05/07/Java/DataJPA/datajpa-elasticsearch-basic.html#more">查看更多</a>
             </div>
         
         <footer class="article-footer">
@@ -696,94 +1338,9 @@
 
 
     
-        <article id="post-example/index" class="article article-type-post" itemscope itemprop="blogPost">
-    <div class="article-inner">
-        
-        
-            <header class="article-header">
-                
-                    <div class="article-meta">
-                        
-    <div class="article-category">
-    	<i class="fa fa-folder"></i>
-        <a class="article-category-link" href="/categories/example/">example</a>
-    </div>
-
-                        
-    <div class="article-tag">
-        <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/%E7%A4%BA%E4%BE%8B/" rel="tag">示例</a>
-    </div>
-
-                        
-    <div class="article-date">
-        <i class="fa fa-calendar"></i>
-        <a href="/2020/05/07/example/index.html">
-            <time datetime="2020-05-07T13:00:58.000Z" itemprop="datePublished">2020-05-07</time>
-        </a>
-    </div>
-
-
-                        
-                            <i class="fa fa-bar-chart"></i>
-                            <span id="busuanzi_container_site_pv"><span id="busuanzi_value_page_pv"></span></span>    
-                        
-                        
-                            <div class="article-meta-button">
-                                <a href='https://github.com/qianmoQ/incubator-learn-spring/raw/master/source/_posts/example/index.md' target="_blank" rel="noopener"> 源文件 </a>
-                            </div>
-                            <div class="article-meta-button">
-                                <a href='https://github.com/qianmoQ/incubator-learn-spring/edit/master/source/_posts/example/index.md' target="_blank" rel="noopener"> 修改 </a>
-                            </div>
-                            <div class="article-meta-button">
-                                <a href='https://github.com/qianmoQ/incubator-learn-spring/commits/master/source/_posts/example/index.md' target="_blank" rel="noopener"> 历史记录 </a>
-                            </div>
-                        
-                    </div>
-                
-                
-    
-        <h1 itemprop="name">
-            <a class="article-title" href="/2020/05/07/example/index.html">示例</a>
-        </h1>
-    
-
-            </header>
-        
-        
-        <div class="article-entry" itemprop="articleBody">
-        
-        
-            
-                
-                
-                    
-                    
-                
-                    
-                    
-                
-                    
-                    
-                
-            
-        
-        
-            <hr>
-<p>这是示例文章…</p>
-
-            </div>
-        
-        <footer class="article-footer">
-        </footer>
-    </div>
-</article>
-
-
-
-
-
-
+        <nav id="page-nav">
+        <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">下一页 &amp;raquo;</a>
+        </nav>
     
 </section>
         </div>
