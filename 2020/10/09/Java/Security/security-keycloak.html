@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <meta charset="utf-8">
+    
+    <title>整合KeyCloak权限管理教程 | 一起学编程</title>
+    
+    
+        <meta name="keywords" content="SpringBoot,KeyCloak" />
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="今天我们尝试Spring Boot Security整合Keycloak，并决定建立一个非常简单的Spring Boot微服务，使用Keycloak作为我的身份验证源，使用Spring Security处理身份验证和授权。 基础环境    技术 版本    Java 1.8+   SpringBoot 1.5.x   KeyCloak 任意版本   设置Keycloak  首先我们需要一个Key">
+<meta property="og:type" content="article">
+<meta property="og:title" content="整合KeyCloak权限管理教程">
+<meta property="og:url" content="https://learn-programming.edurt.io/2020/10/09/Java/Security/security-keycloak.html">
+<meta property="og:site_name" content="一起学编程">
+<meta property="og:description" content="今天我们尝试Spring Boot Security整合Keycloak，并决定建立一个非常简单的Spring Boot微服务，使用Keycloak作为我的身份验证源，使用Spring Security处理身份验证和授权。 基础环境    技术 版本    Java 1.8+   SpringBoot 1.5.x   KeyCloak 任意版本   设置Keycloak  首先我们需要一个Key">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-10-09T11:48:31.000Z">
+<meta property="article:modified_time" content="2020-10-09T11:49:01.702Z">
+<meta property="article:author" content="edurtio">
+<meta property="article:tag" content="SpringBoot">
+<meta property="article:tag" content="KeyCloak">
+<meta name="twitter:card" content="summary">
+    
+
+    
+        <link rel="alternate" href="/atom.xml" title="一起学编程" type="application/atom+xml" />
+    
+
+    
+        <link rel="icon" href="/favicon.ico" />
+    
+
+    
+<link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/libs/open-sans/styles.css">
+
+    
+<link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<script src="/libs/jquery/2.1.3/jquery.min.js"></script>
+
+    
+<script src="/libs/jquery/plugins/cookie/1.4.1/jquery.cookie.js"></script>
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+
+    
+    
+    
+    
+
+
+    
+        <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">一起学编程</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/">首页</a>
+                
+                    <a class="main-nav-link" href="/archives">归档</a>
+                
+                    <a class="main-nav-link" href="/categories">分类</a>
+                
+                    <a class="main-nav-link" href="/tags">标签</a>
+                
+                    <a class="main-nav-link" href="/about">关于</a>
+                
+            </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/">首页</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">归档</a></td>
+                
+                    <td><a class="main-nav-link" href="/categories">分类</a></td>
+                
+                    <td><a class="main-nav-link" href="/tags">标签</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">关于</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+            
+                <aside id="sidebar">
+   
+        
+    <div class="widget-wrap" id='categories'>
+        <h3 class="widget-title">
+            <span>分类</span>
+            &nbsp;
+            <a id='allExpand' href="#">
+                <i class="fa fa-angle-double-down fa-2x"></i>
+            </a>
+        </h3>
+        
+        
+        
+         <ul class="unstyled" id="tree" > 
+                    <li class="directory open">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder-open"></i>
+                            &nbsp;
+                            Java
+                        </a>
+                         <ul class="unstyled" id="tree" > 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            DataJPA
+                        </a>
+                         <ul class="unstyled" id="tree" >  <li class="file"><a href="/2020/05/07/Java/DataJPA/datajpa-elasticsearch-basic.html">整合ElasticSearch教程(基础版)</a></li>  <li class="file"><a href="/2020/05/08/Java/DataJPA/datajpa-jdbc-basic.html">整合JDBC教程(基础版)</a></li>  <li class="file"><a href="/2020/05/08/Java/DataJPA/datajpa-mongodb-basic.html">整合MongoDB教程(基础版)</a></li>  <li class="file"><a href="/2020/05/09/Java/DataJPA/datajpa-mongodb-template.html">整合MongoDB教程(Template版)</a></li>  <li class="file"><a href="/2020/05/31/Java/DataJPA/datajpa-redis-basic.html">整合Redis教程(基础版)</a></li>  <li class="file"><a href="/2020/05/31/Java/DataJPA/datajpa-redis-template.html">整合Redis教程(Template版)</a></li>  <li class="file"><a href="/2020/05/31/Java/DataJPA/datajpa-redis-datajpa.html">整合Redis教程(JPA实战版)</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Guice
+                        </a>
+                         <ul class="unstyled" id="tree" >  <li class="file"><a href="/2020/10/09/Java/Guice/binder-multiple.html">Guice依赖注入(基础版)</a></li>  <li class="file"><a href="/2020/10/09/Java/Guice/guice-binder.html">Guice依赖注入(构造函数注入)</a></li>  <li class="file"><a href="/2020/10/09/Java/Guice/binder-constructor.html">Guice依赖注入(接口多实现)</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory open">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder-open"></i>
+                            &nbsp;
+                            Security
+                        </a>
+                         <ul class="unstyled" id="tree" >  <li class="file"><a href="/2020/10/09/Java/Security/security-jwt.html">整合JWT授权RestAPI</a></li>  <li class="file active"><a href="/2020/10/09/Java/Security/security-keycloak.html">整合KeyCloak权限管理教程</a></li>  <li class="file"><a href="/2020/10/09/Java/Security/security-ldap.html">整合LDAP单点登录</a></li>  </ul> 
+                    </li> 
+                     </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            example
+                        </a>
+                         <ul class="unstyled" id="tree" >  <li class="file"><a href="/2020/05/07/example/index.html">示例</a></li>  </ul> 
+                    </li> 
+                     </ul> 
+    </div>
+    <script>
+        $(document).ready(function() {
+            var iconFolderOpenClass  = 'fa-folder-open';
+            var iconFolderCloseClass = 'fa-folder';
+            var iconAllExpandClass = 'fa-angle-double-down';
+            var iconAllPackClass = 'fa-angle-double-up';
+            // Handle directory-tree expansion:
+            // 左键单独展开目录
+            $(document).on('click', '#categories a[data-role="directory"]', function (event) {
+                event.preventDefault();
+
+                var icon = $(this).children('.fa');
+                var expanded = icon.hasClass(iconFolderOpenClass);
+                var subtree = $(this).siblings('ul');
+                icon.removeClass(iconFolderOpenClass).removeClass(iconFolderCloseClass);
+                if (expanded) {
+                    if (typeof subtree != 'undefined') {
+                        subtree.slideUp({ duration: 100 });
+                    }
+                    icon.addClass(iconFolderCloseClass);
+                } else {
+                    if (typeof subtree != 'undefined') {
+                        subtree.slideDown({ duration: 100 });
+                    }
+                    icon.addClass(iconFolderOpenClass);
+                }
+            });
+            // 右键展开下属所有目录
+            $('#categories a[data-role="directory"]').bind("contextmenu", function(event){
+                event.preventDefault();
+                
+                var icon = $(this).children('.fa');
+                var expanded = icon.hasClass(iconFolderOpenClass);
+                var listNode = $(this).siblings('ul');
+                var subtrees = $.merge(listNode.find('li ul'), listNode);
+                var icons = $.merge(listNode.find('.fa'), icon);
+                icons.removeClass(iconFolderOpenClass).removeClass(iconFolderCloseClass);
+                if(expanded) {
+                    subtrees.slideUp({ duration: 100 });
+                    icons.addClass(iconFolderCloseClass);
+                } else {
+                    subtrees.slideDown({ duration: 100 });
+                    icons.addClass(iconFolderOpenClass);
+                }
+            })
+            // 展开关闭所有目录按钮
+            $(document).on('click', '#allExpand', function (event) {
+                event.preventDefault();
+                
+                var icon = $(this).children('.fa');
+                var expanded = icon.hasClass(iconAllExpandClass);
+                icon.removeClass(iconAllExpandClass).removeClass(iconAllPackClass);
+                if(expanded) {
+                    $('#sidebar .fa.fa-folder').removeClass('fa-folder').addClass('fa-folder-open')
+                    $('#categories li ul').slideDown({ duration: 100 });
+                    icon.addClass(iconAllPackClass);
+                } else {
+                    $('#sidebar .fa.fa-folder-open').removeClass('fa-folder-open').addClass('fa-folder')
+                    $('#categories li ul').slideUp({ duration: 100 });
+                    icon.addClass(iconAllExpandClass);
+                }
+            });  
+        });
+    </script>
+
+    
+        
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title"><span>链接</span></h3>
+        <div class="widget">
+            <ul>
+                
+            </ul>
+        </div>
+    </div>
+
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+            
+            <section id="main"><article id="post-Java/Security/security-keycloak" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+                    <div class="article-meta">
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/Java/">Java</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/Java/Security/">Security</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/KeyCloak/" rel="tag">KeyCloak</a>, <a class="tag-link" href="/tags/SpringBoot/" rel="tag">SpringBoot</a>
+    </div>
+
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2020/10/09/Java/Security/security-keycloak.html">
+            <time datetime="2020-10-09T11:48:31.000Z" itemprop="datePublished">2020-10-09</time>
+        </a>
+    </div>
+
+
+                        
+                            <i class="fa fa-bar-chart"></i>
+                            <span id="busuanzi_container_site_pv"><span id="busuanzi_value_page_pv"></span></span>    
+                        
+                        
+                            <div class="article-meta-button">
+                                <a href='https://github.com/qianmoQ/incubator-learn-spring/raw/master/source/_posts/Java/Security/security-keycloak.md' target="_blank" rel="noopener"> 源文件 </a>
+                            </div>
+                            <div class="article-meta-button">
+                                <a href='https://github.com/qianmoQ/incubator-learn-spring/edit/master/source/_posts/Java/Security/security-keycloak.md' target="_blank" rel="noopener"> 修改 </a>
+                            </div>
+                            <div class="article-meta-button">
+                                <a href='https://github.com/qianmoQ/incubator-learn-spring/commits/master/source/_posts/Java/Security/security-keycloak.md' target="_blank" rel="noopener"> 历史记录 </a>
+                            </div>
+                        
+                    </div>
+                
+                
+    
+        <h1 class="article-title" itemprop="name">
+            整合KeyCloak权限管理教程
+        </h1>
+    
+
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+        
+            
+        
+        
+            <hr>
+<p>今天我们尝试Spring Boot Security整合Keycloak，并决定建立一个非常简单的Spring Boot微服务，使用Keycloak作为我的身份验证源，使用Spring Security处理身份验证和授权。</p>
+<h4 id="基础环境"><a href="#基础环境" class="headerlink" title="基础环境"></a>基础环境</h4><hr>
+<table>
+<thead>
+<tr>
+<th align="center">技术</th>
+<th>版本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">Java</td>
+<td>1.8+</td>
+</tr>
+<tr>
+<td align="center">SpringBoot</td>
+<td>1.5.x</td>
+</tr>
+<tr>
+<td align="center">KeyCloak</td>
+<td>任意版本</td>
+</tr>
+</tbody></table>
+<h4 id="设置Keycloak"><a href="#设置Keycloak" class="headerlink" title="设置Keycloak"></a>设置Keycloak</h4><hr>
+<ul>
+<li>首先我们需要一个Keycloak实例，让我们启动Jboss提供的Docker容器：</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">docker run -d \</span><br><span class="line">  --name spring-learn-integration-springboot-security-keycloak \</span><br><span class="line">  -e KEYCLOAK_USER=admin \</span><br><span class="line">  -e KEYCLOAK_PASSWORD=admin \</span><br><span class="line">  -p 9001:8080 \</span><br><span class="line">  jboss/keycloak</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>在此之后，我们只需登录到容器并导航到<code>bin</code>文件夹。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="built_in">exec</span> -it spring-learn-integration-springboot-security-keycloak /bin/bash</span><br><span class="line"><span class="built_in">cd</span> keycloak/bin</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>首先，我们需要从CLI客户端登录keycloak服务器，之后我们不再需要身份验证：</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./kcadm.sh config credentials --server http://localhost:8080/auth --realm master --user admin --password admin</span><br></pre></td></tr></table></figure>
+
+<h4 id="配置realm"><a href="#配置realm" class="headerlink" title="配置realm"></a>配置realm</h4><hr>
+<ul>
+<li>首先，我们需要创建一个realm:</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">./kcadm.sh create realms -s realm=spring-learn-integration-springboot-security-keycloak -s enabled=<span class="literal">true</span></span><br><span class="line"></span><br><span class="line">Created new realm with id <span class="string">'spring-learn-integration-springboot-security-keycloak'</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>之后，我们需要创建2个客户端，这将为我们的应用程序提供身份验证。首先我们创建一个cURL客户端，这样我们就可以通过命令行命令登录：</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">./kcadm.sh create clients -r spring-learn-integration-springboot-security-keycloak -s clientId=curl -s enabled=<span class="literal">true</span> -s publicClient=<span class="literal">true</span> -s baseUrl=http://localhost:8080 -s adminUrl=http://localhost:8080 -s directAccessGrantsEnabled=<span class="literal">true</span></span><br><span class="line"></span><br><span class="line">Created new client with id <span class="string">'8f0481cd-3bbb-4659-850f-6088466a4d89'</span></span><br></pre></td></tr></table></figure>
+
+<p>重要的是要注意2个选项：<code>publicClient=true</code>和 <code>directAccessGrantsEnabled=true</code>。第一个使这个客户端公开，这意味着我们的cURL客户端可以在不提供任何秘密的情况下启动登录。第二个使我们能够使用用户名和密码直接登录。</p>
+<ul>
+<li>其次，我们创建了一个由REST服务使用的客户端：</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">./kcadm.sh create clients -r spring-learn-integration-springboot-security-keycloak -s clientId=spring-learn-integration-springboot-security-keycloak-client -s enabled=<span class="literal">true</span> -s baseUrl=http://localhost:8080 -s bearerOnly=<span class="literal">true</span></span><br><span class="line"></span><br><span class="line">Created new client with id <span class="string">'ab9d404e-6d5b-40ac-9bc3-9e2e26b68213'</span></span><br></pre></td></tr></table></figure>
+
+<p>这里的重要配置是<code>bearerOnly=true</code>。这告诉Keycloak客户端永远不会启动登录过程，但是当它收到Bearer令牌时，它将检查所述令牌的有效性。</p>
+<blockquote>
+<p>我们应该注意保留这些ID，因为我们将在接下来的步骤中使用它们。</p>
+</blockquote>
+<ul>
+<li>我们有两个客户端，接下来是为spring-security-keycloak-example-app客户创建角色</li>
+</ul>
+<p>Admin Role:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">./kcadm.sh create clients/ab9d404e-6d5b-40ac-9bc3-9e2e26b68213/roles -r spring-learn-integration-springboot-security-keycloak -s name=admin -s <span class="string">'description=Admin role'</span></span><br><span class="line"></span><br><span class="line">Created new role with id <span class="string">'admin'</span></span><br></pre></td></tr></table></figure>
+
+<p>User Role:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">./kcadm.sh create clients/ab9d404e-6d5b-40ac-9bc3-9e2e26b68213/roles -r spring-learn-integration-springboot-security-keycloak -s name=user -s <span class="string">'description=User role'</span></span><br><span class="line"></span><br><span class="line">Created new role with id <span class="string">'user'</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意client后的id是我们创建客户端输出的id</p>
+</blockquote>
+<ul>
+<li>最后，我们应该获取客户端的配置，以便稍后提供给我们的应用程序：</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./kcadm.sh  get clients/ab9d404e-6d5b-40ac-9bc3-9e2e26b68213/installation/providers/keycloak-oidc-keycloak-json -r spring-learn-integration-springboot-security-keycloak</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意client后的id是我们创建客户端输出的id</p>
+</blockquote>
+<p>应该返回类似于此的内容：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"realm"</span> : <span class="string">"spring-learn-integration-springboot-security-keycloak"</span>,</span><br><span class="line">  <span class="attr">"bearer-only"</span> : <span class="literal">true</span>,</span><br><span class="line">  <span class="attr">"auth-server-url"</span> : <span class="string">"http://localhost:8080/auth"</span>,</span><br><span class="line">  <span class="attr">"ssl-required"</span> : <span class="string">"external"</span>,</span><br><span class="line">  <span class="attr">"resource"</span> : <span class="string">"spring-learn-integration-springboot-security-keycloak-client"</span>,</span><br><span class="line">  <span class="attr">"verify-token-audience"</span> : <span class="literal">true</span>,</span><br><span class="line">  <span class="attr">"use-resource-role-mappings"</span> : <span class="literal">true</span>,</span><br><span class="line">  <span class="attr">"confidential-port"</span> : <span class="number">0</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="配置用户"><a href="#配置用户" class="headerlink" title="配置用户"></a>配置用户</h4><hr>
+<p>出于演示目的，我们创建2个具有2个不同角色的用户，以便我们验证授权是否有效。</p>
+<ul>
+<li>首先，让我们创建一个具有admin角色的用户：</li>
+</ul>
+<p>创建admin用户：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">./kcadm.sh create users -r spring-learn-integration-springboot-security-keycloak -s username=admin -s enabled=<span class="literal">true</span></span><br><span class="line"></span><br><span class="line">Created new user with id <span class="string">'50c11a76-a8ff-42b1-80cb-d82cb3e7616d'</span></span><br></pre></td></tr></table></figure>
+
+<p>设置admin密码：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./kcadm.sh update users/50c11a76-a8ff-42b1-80cb-d82cb3e7616d/reset-password -r spring-learn-integration-springboot-security-keycloak -s <span class="built_in">type</span>=password -s value=admin -s temporary=<span class="literal">false</span> -n</span><br></pre></td></tr></table></figure>
+
+<p><strong>value</strong>: 用户密码</p>
+<p>追加到admin角色中</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./kcadm.sh add-roles -r spring-learn-integration-springboot-security-keycloak --uusername=admin --cclientid spring-learn-integration-springboot-security-keycloak-client --rolename admin</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意：从不在生产中使用此方法，它仅用于演示目的！</p>
+</blockquote>
+<ul>
+<li>然后我们创建另一个用户，这次有角色user：</li>
+</ul>
+<p>创建user用户：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">./kcadm.sh create users -r spring-learn-integration-springboot-security-keycloak -s username=user -s enabled=<span class="literal">true</span></span><br><span class="line"></span><br><span class="line">Created new user with id <span class="string">'624434c8-bce4-4b5b-b81f-e77304785803'</span></span><br></pre></td></tr></table></figure>
+
+<p>设置user密码：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./kcadm.sh update users/624434c8-bce4-4b5b-b81f-e77304785803/reset-password -r spring-learn-integration-springboot-security-keycloak -s <span class="built_in">type</span>=password -s value=admin -s temporary=<span class="literal">false</span> -n</span><br></pre></td></tr></table></figure>
+
+<p>追加到user角色中：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./kcadm.sh add-roles -r spring-learn-integration-springboot-security-keycloak --uusername=user --cclientid spring-learn-integration-springboot-security-keycloak-client --rolename user</span><br></pre></td></tr></table></figure>
+
+<h4 id="Rest服务"><a href="#Rest服务" class="headerlink" title="Rest服务"></a>Rest服务</h4><hr>
+<p>我们已经配置了Keycloak并准备使用，我们只需要一个应用程序来使用它！所以我们创建一个简单的Spring Boot应用程序。我会在这里使用maven构建项目：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">project</span> <span class="attr">xmlns</span>=<span class="string">"http://maven.apache.org/POM/4.0.0"</span></span></span><br><span class="line"><span class="tag">         <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></span></span><br><span class="line"><span class="tag">         <span class="attr">xsi:schemaLocation</span>=<span class="string">"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">parent</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-learn-integration-springboot<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.edurt.sli<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.0.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">parent</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">modelVersion</span>&gt;</span>4.0.0<span class="tag">&lt;/<span class="name">modelVersion</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-learn-integration-springboot-security-keycloak<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>SpringBoot整合KeyCloak权限管理<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">properties</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- dependency config --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency.lombox.version</span>&gt;</span>1.16.16<span class="tag">&lt;/<span class="name">dependency.lombox.version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency.keycloak.version</span>&gt;</span>3.1.0.Final<span class="tag">&lt;/<span class="name">dependency.keycloak.version</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- plugin config --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">plugin.maven.compiler.version</span>&gt;</span>3.3<span class="tag">&lt;/<span class="name">plugin.maven.compiler.version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">plugin.maven.javadoc.version</span>&gt;</span>2.10.4<span class="tag">&lt;/<span class="name">plugin.maven.javadoc.version</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- environment config --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">environment.compile.java.version</span>&gt;</span>1.8<span class="tag">&lt;/<span class="name">environment.compile.java.version</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- reporting config --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">reporting.maven.jxr.version</span>&gt;</span>2.5<span class="tag">&lt;/<span class="name">reporting.maven.jxr.version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">properties</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- lombok --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.projectlombok<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>lombok<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>$&#123;dependency.lombox.version&#125;<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- springboot --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-web<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-security<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- keycloak --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.keycloak<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>keycloak-spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>$&#123;dependency.keycloak.version&#125;<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.keycloak<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>keycloak-spring-security-adapter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>$&#123;dependency.keycloak.version&#125;<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">build</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">plugins</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">plugin</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-maven-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">version</span>&gt;</span>$&#123;dependency.springboot.version&#125;<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">fork</span>&gt;</span>true<span class="tag">&lt;/<span class="name">fork</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">plugin</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.maven.plugins<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>maven-compiler-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">version</span>&gt;</span>$&#123;plugin.maven.compiler.version&#125;<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">source</span>&gt;</span>$&#123;system.java.version&#125;<span class="tag">&lt;/<span class="name">source</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">target</span>&gt;</span>$&#123;system.java.version&#125;<span class="tag">&lt;/<span class="name">target</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">plugins</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">build</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">project</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>添加所有必需的依赖项：</p>
+<ul>
+<li>spring-security 用于保护应用程序</li>
+<li>keycloak-spring-boot-starter 使用Keycloak和Spring Boot</li>
+<li>keycloak-spring-security-adapter与Spring Security集成</li>
+</ul>
+<p>一个简单的应用类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Licensed to the Apache Software Foundation (ASF) under one</span></span><br><span class="line"><span class="comment"> * or more contributor license agreements.  See the NOTICE file</span></span><br><span class="line"><span class="comment"> * distributed with this work for additional information</span></span><br><span class="line"><span class="comment"> * regarding copyright ownership.  The ASF licenses this file</span></span><br><span class="line"><span class="comment"> * to you under the Apache License, Version 2.0 (the</span></span><br><span class="line"><span class="comment"> * "License"); you may not use this file except in compliance</span></span><br><span class="line"><span class="comment"> * with the License.  You may obtain a copy of the License at</span></span><br><span class="line"><span class="comment"> * &lt;p&gt;</span></span><br><span class="line"><span class="comment"> * http://www.apache.org/licenses/LICENSE-2.0</span></span><br><span class="line"><span class="comment"> * &lt;p&gt;</span></span><br><span class="line"><span class="comment"> * Unless required by applicable law or agreed to in writing, software</span></span><br><span class="line"><span class="comment"> * distributed under the License is distributed on an "AS IS" BASIS,</span></span><br><span class="line"><span class="comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span></span><br><span class="line"><span class="comment"> * See the License for the specific language governing permissions and</span></span><br><span class="line"><span class="comment"> * limitations under the License.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">package</span> com.edurt.sli.slissk;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.springframework.boot.SpringApplication;</span><br><span class="line"><span class="keyword">import</span> org.springframework.boot.autoconfigure.SpringBootApplication;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * &lt;p&gt; SpringBootSecurityKeyCloakIntegration &lt;/p&gt;</span></span><br><span class="line"><span class="comment"> * &lt;p&gt; Description : SpringBootSecurityKeyCloakIntegration &lt;/p&gt;</span></span><br><span class="line"><span class="comment"> * &lt;p&gt; Author : qianmoQ &lt;/p&gt;</span></span><br><span class="line"><span class="comment"> * &lt;p&gt; Version : 1.0 &lt;/p&gt;</span></span><br><span class="line"><span class="comment"> * &lt;p&gt; Create Time : 2019-02-18 14:45 &lt;/p&gt;</span></span><br><span class="line"><span class="comment"> * &lt;p&gt; Author Email: &lt;a href="mailTo:shichengoooo@163.com"&gt;qianmoQ&lt;/a&gt; &lt;/p&gt;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SpringBootSecurityKeyCloakIntegration</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        SpringApplication.run(SpringBootSecurityKeyCloakIntegration<span class="class">.<span class="keyword">class</span>, <span class="title">args</span>)</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Rest API接口：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Licensed to the Apache Software Foundation (ASF) under one</span></span><br><span class="line"><span class="comment"> * or more contributor license agreements.  See the NOTICE file</span></span><br><span class="line"><span class="comment"> * distributed with this work for additional information</span></span><br><span class="line"><span class="comment"> * regarding copyright ownership.  The ASF licenses this file</span></span><br><span class="line"><span class="comment"> * to you under the Apache License, Version 2.0 (the</span></span><br><span class="line"><span class="comment"> * "License"); you may not use this file except in compliance</span></span><br><span class="line"><span class="comment"> * with the License.  You may obtain a copy of the License at</span></span><br><span class="line"><span class="comment"> * &lt;p&gt;</span></span><br><span class="line"><span class="comment"> * http://www.apache.org/licenses/LICENSE-2.0</span></span><br><span class="line"><span class="comment"> * &lt;p&gt;</span></span><br><span class="line"><span class="comment"> * Unless required by applicable law or agreed to in writing, software</span></span><br><span class="line"><span class="comment"> * distributed under the License is distributed on an "AS IS" BASIS,</span></span><br><span class="line"><span class="comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span></span><br><span class="line"><span class="comment"> * See the License for the specific language governing permissions and</span></span><br><span class="line"><span class="comment"> * limitations under the License.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">package</span> com.edurt.sli.slissk.controller;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.springframework.security.access.annotation.Secured;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.GetMapping;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.RestController;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * &lt;p&gt; HelloController &lt;/p&gt;</span></span><br><span class="line"><span class="comment"> * &lt;p&gt; Description : HelloController &lt;/p&gt;</span></span><br><span class="line"><span class="comment"> * &lt;p&gt; Author : qianmoQ &lt;/p&gt;</span></span><br><span class="line"><span class="comment"> * &lt;p&gt; Version : 1.0 &lt;/p&gt;</span></span><br><span class="line"><span class="comment"> * &lt;p&gt; Create Time : 2019-02-18 14:50 &lt;/p&gt;</span></span><br><span class="line"><span class="comment"> * &lt;p&gt; Author Email: &lt;a href="mailTo:shichengoooo@163.com"&gt;qianmoQ&lt;/a&gt; &lt;/p&gt;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping</span>(value = <span class="string">"/admin"</span>)</span><br><span class="line">    <span class="meta">@Secured</span>(<span class="string">"ROLE_ADMIN"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">admin</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"Admin"</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping</span>(<span class="string">"/user"</span>)</span><br><span class="line">    <span class="meta">@Secured</span>(<span class="string">"ROLE_USER"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">user</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"User"</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最后是keycloak配置：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Licensed to the Apache Software Foundation (ASF) under one</span></span><br><span class="line"><span class="comment"> * or more contributor license agreements.  See the NOTICE file</span></span><br><span class="line"><span class="comment"> * distributed with this work for additional information</span></span><br><span class="line"><span class="comment"> * regarding copyright ownership.  The ASF licenses this file</span></span><br><span class="line"><span class="comment"> * to you under the Apache License, Version 2.0 (the</span></span><br><span class="line"><span class="comment"> * "License"); you may not use this file except in compliance</span></span><br><span class="line"><span class="comment"> * with the License.  You may obtain a copy of the License at</span></span><br><span class="line"><span class="comment"> * &lt;p&gt;</span></span><br><span class="line"><span class="comment"> * http://www.apache.org/licenses/LICENSE-2.0</span></span><br><span class="line"><span class="comment"> * &lt;p&gt;</span></span><br><span class="line"><span class="comment"> * Unless required by applicable law or agreed to in writing, software</span></span><br><span class="line"><span class="comment"> * distributed under the License is distributed on an "AS IS" BASIS,</span></span><br><span class="line"><span class="comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span></span><br><span class="line"><span class="comment"> * See the License for the specific language governing permissions and</span></span><br><span class="line"><span class="comment"> * limitations under the License.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">package</span> com.edurt.sli.slissk.config;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.keycloak.adapters.KeycloakConfigResolver;</span><br><span class="line"><span class="keyword">import</span> org.keycloak.adapters.springboot.KeycloakSpringBootConfigResolver;</span><br><span class="line"><span class="keyword">import</span> org.keycloak.adapters.springsecurity.authentication.KeycloakAuthenticationProvider;</span><br><span class="line"><span class="keyword">import</span> org.keycloak.adapters.springsecurity.config.KeycloakWebSecurityConfigurerAdapter;</span><br><span class="line"><span class="keyword">import</span> org.keycloak.adapters.springsecurity.filter.KeycloakAuthenticationProcessingFilter;</span><br><span class="line"><span class="keyword">import</span> org.keycloak.adapters.springsecurity.filter.KeycloakPreAuthActionsFilter;</span><br><span class="line"><span class="keyword">import</span> org.springframework.boot.web.servlet.FilterRegistrationBean;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Bean;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Configuration;</span><br><span class="line"><span class="keyword">import</span> org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;</span><br><span class="line"><span class="keyword">import</span> org.springframework.security.config.annotation.web.builders.HttpSecurity;</span><br><span class="line"><span class="keyword">import</span> org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;</span><br><span class="line"><span class="keyword">import</span> org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;</span><br><span class="line"><span class="keyword">import</span> org.springframework.security.core.authority.mapping.SimpleAuthorityMapper;</span><br><span class="line"><span class="keyword">import</span> org.springframework.security.web.authentication.session.NullAuthenticatedSessionStrategy;</span><br><span class="line"><span class="keyword">import</span> org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * &lt;p&gt; KeycloakSecurityConfigurer &lt;/p&gt;</span></span><br><span class="line"><span class="comment"> * &lt;p&gt; Description : KeycloakSecurityConfigurer &lt;/p&gt;</span></span><br><span class="line"><span class="comment"> * &lt;p&gt; Author : qianmoQ &lt;/p&gt;</span></span><br><span class="line"><span class="comment"> * &lt;p&gt; Version : 1.0 &lt;/p&gt;</span></span><br><span class="line"><span class="comment"> * &lt;p&gt; Create Time : 2019-02-18 14:51 &lt;/p&gt;</span></span><br><span class="line"><span class="comment"> * &lt;p&gt; Author Email: &lt;a href="mailTo:shichengoooo@163.com"&gt;qianmoQ&lt;/a&gt; &lt;/p&gt;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@EnableWebSecurity</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">KeycloakSecurityConfigurer</span> <span class="keyword">extends</span> <span class="title">KeycloakWebSecurityConfigurerAdapter</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> GrantedAuthoritiesMapper <span class="title">grantedAuthoritiesMapper</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        SimpleAuthorityMapper mapper = <span class="keyword">new</span> SimpleAuthorityMapper();</span><br><span class="line">        mapper.setConvertToUpperCase(<span class="keyword">true</span>);</span><br><span class="line">        <span class="keyword">return</span> mapper;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> KeycloakAuthenticationProvider <span class="title">keycloakAuthenticationProvider</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">final</span> KeycloakAuthenticationProvider provider = <span class="keyword">super</span>.keycloakAuthenticationProvider();</span><br><span class="line">        provider.setGrantedAuthoritiesMapper(grantedAuthoritiesMapper());</span><br><span class="line">        <span class="keyword">return</span> provider;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">configure</span><span class="params">(<span class="keyword">final</span> AuthenticationManagerBuilder auth)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        auth.authenticationProvider(keycloakAuthenticationProvider());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> SessionAuthenticationStrategy <span class="title">sessionAuthenticationStrategy</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> NullAuthenticatedSessionStrategy();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">configure</span><span class="params">(<span class="keyword">final</span> HttpSecurity http)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.configure(http);</span><br><span class="line">        http</span><br><span class="line">                .authorizeRequests()</span><br><span class="line">                .antMatchers(<span class="string">"/admin"</span>).hasRole(<span class="string">"ADMIN"</span>)</span><br><span class="line">                .antMatchers(<span class="string">"/user"</span>).hasRole(<span class="string">"USER"</span>)</span><br><span class="line">                .anyRequest().permitAll();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function">KeycloakConfigResolver <span class="title">keycloakConfigResolver</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> KeycloakSpringBootConfigResolver();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> FilterRegistrationBean <span class="title">keycloakAuthenticationProcessingFilterRegistrationBean</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">            <span class="keyword">final</span> KeycloakAuthenticationProcessingFilter filter)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">final</span> FilterRegistrationBean registrationBean = <span class="keyword">new</span> FilterRegistrationBean(filter);</span><br><span class="line">        registrationBean.setEnabled(<span class="keyword">false</span>);</span><br><span class="line">        <span class="keyword">return</span> registrationBean;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> FilterRegistrationBean <span class="title">keycloakPreAuthActionsFilterRegistrationBean</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">            <span class="keyword">final</span> KeycloakPreAuthActionsFilter filter)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">final</span> FilterRegistrationBean registrationBean = <span class="keyword">new</span> FilterRegistrationBean(filter);</span><br><span class="line">        registrationBean.setEnabled(<span class="keyword">false</span>);</span><br><span class="line">        <span class="keyword">return</span> registrationBean;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>KeycloakSecurityConfigurer类扩展 KeycloakWebSecurityConfigurerAdapter，这是Keycloak提供的类，它提供与Spring Security的集成。</p>
+<p>然后我们通过添加<a href="http://docs.spring.io/spring-security/site/docs/current/apidocs/org/springframework/security/core/authority/mapping/SimpleAuthorityMapper.html" target="_blank" rel="noopener">SimpleAuthorityMapper</a>配置身份验证管理器，它负责转换来自Keycloak的角色名称以匹配Spring Security的约定。基本上Spring Security期望以<code>ROLE_</code>前缀开头的角色，ROLE_ADMIN可以像Keycloak一样命名我们的角色，或者我们可以将它们命名为admin，然后使用此映射器将其转换为大写并添加必要的<code>ROLE_</code>前缀：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> GrantedAuthoritiesMapper <span class="title">grantedAuthoritiesMapper</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  SimpleAuthorityMapper mapper = <span class="keyword">new</span> SimpleAuthorityMapper();</span><br><span class="line">  mapper.setConvertToUpperCase(<span class="keyword">true</span>);</span><br><span class="line">  <span class="keyword">return</span> mapper;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> KeycloakAuthenticationProvider <span class="title">keycloakAuthenticationProvider</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="keyword">final</span> KeycloakAuthenticationProvider provider = <span class="keyword">super</span>.keycloakAuthenticationProvider();</span><br><span class="line">  provider.setGrantedAuthoritiesMapper(grantedAuthoritiesMapper());</span><br><span class="line">  <span class="keyword">return</span> provider;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">configure</span><span class="params">(<span class="keyword">final</span> AuthenticationManagerBuilder auth)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">  auth.authenticationProvider(keycloakAuthenticationProvider());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们还需要为Keycloak设置会话策略，但是当我们创建无状态REST服务时，我们并不真的想要有会话，因此我们使用NullAuthenticatedSessionStrategy：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> SessionAuthenticationStrategy <span class="title">sessionAuthenticationStrategy</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> NullAuthenticatedSessionStrategy();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>通常，Keycloak Spring Security集成从keycloak.json文件中解析keycloak配置，但是我们希望有适当的Spring Boot配置，因此我们使用Spring Boot覆盖配置解析器：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="function">KeycloakConfigResolver <span class="title">keycloakConfigResolver</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> KeycloakSpringBootConfigResolver();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后我们配置Spring Security来授权所有请求：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">configure</span><span class="params">(<span class="keyword">final</span> HttpSecurity http)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">  <span class="keyword">super</span>.configure(http);</span><br><span class="line">  http</span><br><span class="line">      .authorizeRequests()</span><br><span class="line">      .anyRequest().permitAll();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最后，根据文档，我们阻止双重注册Keycloak的过滤器：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> FilterRegistrationBean <span class="title">keycloakAuthenticationProcessingFilterRegistrationBean</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="keyword">final</span> KeycloakAuthenticationProcessingFilter filter)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">final</span> FilterRegistrationBean registrationBean = <span class="keyword">new</span> FilterRegistrationBean(filter);</span><br><span class="line">  registrationBean.setEnabled(<span class="keyword">false</span>);</span><br><span class="line">  <span class="keyword">return</span> registrationBean;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> FilterRegistrationBean <span class="title">keycloakPreAuthActionsFilterRegistrationBean</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="keyword">final</span> KeycloakPreAuthActionsFilter filter)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">final</span> FilterRegistrationBean registrationBean = <span class="keyword">new</span> FilterRegistrationBean(filter);</span><br><span class="line">  registrationBean.setEnabled(<span class="keyword">false</span>);</span><br><span class="line">  <span class="keyword">return</span> registrationBean;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最后，我们需要application.properties使用之前下载的值配置我们的应用程序 ：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">server.port=<span class="number">9002</span></span><br><span class="line">keycloak.realm=spring-learn-integration-springboot-security-keycloak</span><br><span class="line">keycloak.bearer-only=<span class="keyword">true</span></span><br><span class="line">keycloak.auth-server-url=http:<span class="comment">//localhost:9001/auth</span></span><br><span class="line">keycloak.ssl-required=external</span><br><span class="line">keycloak.resource=spring-learn-integration-springboot-security-keycloak-client</span><br><span class="line">keycloak.use-resource-role-mappings=<span class="keyword">true</span></span><br><span class="line">keycloak.principal-attribute=preferred_username</span><br></pre></td></tr></table></figure>
+
+<h4 id="使用应用程序"><a href="#使用应用程序" class="headerlink" title="使用应用程序"></a>使用应用程序</h4><hr>
+<ul>
+<li>使用curl我们创建的客户端进行身份验证，以获取访问令牌：</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> TOKEN=`curl -ss --data <span class="string">"grant_type=password&amp;client_id=curl&amp;username=admin&amp;password=admin"</span> http://localhost:9001/auth/realms/spring-learn-integration-springboot-security-keycloak/protocol/openid-connect/token | jq -r .access_token`</span><br></pre></td></tr></table></figure>
+
+<p>这将收到的访问令牌存储在TOKEN变量中。</p>
+<p>现在我们可以检查我们的管理员是否可以访问自己的/admin接口</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">curl -H <span class="string">"Authorization: bearer <span class="variable">$TOKEN</span>"</span> http://localhost:9002/admin</span><br><span class="line"></span><br><span class="line">Admin</span><br></pre></td></tr></table></figure>
+
+<p>但它无法访问/user接口：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ curl -H <span class="string">"Authorization: bearer <span class="variable">$TOKEN</span>"</span> http://localhost:9002/user</span><br><span class="line"></span><br><span class="line">&#123;<span class="string">"timestamp"</span>:1498728302626,<span class="string">"status"</span>:403,<span class="string">"error"</span>:<span class="string">"Forbidden"</span>,<span class="string">"message"</span>:<span class="string">"Access is denied"</span>,<span class="string">"path"</span>:<span class="string">"/user"</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p>对于user用户也是如此，user用户无法访问admin接口。</p>
+<h4 id="打包文件部署"><a href="#打包文件部署" class="headerlink" title="打包文件部署"></a>打包文件部署</h4><hr>
+<ul>
+<li>打包数据</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mvn clean package -Dmaven.test.skip=<span class="literal">true</span> -X</span><br></pre></td></tr></table></figure>
+
+<p>运行打包后的文件即可</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -jar target/spring-learn-integration-springboot-security-keycloak-1.0.0.jar</span><br></pre></td></tr></table></figure>
+
+<h4 id="源码地址"><a href="#源码地址" class="headerlink" title="源码地址"></a>源码地址</h4><hr>
+<ul>
+<li><a href="https://github.com/EdurtIO/programming-learn-integration/tree/master/security/security-keycloak" target="_blank" rel="noopener">GitHub</a></li>
+</ul>
+
+            </div>
+        
+        <footer class="article-footer">
+        </footer>
+    </div>
+</article>
+
+
+    
+<nav id="article-nav">
+    
+        <a href="/2020/10/09/Java/Security/security-ldap.html" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">上一篇</strong>
+            <div class="article-nav-title">
+                
+                    整合LDAP单点登录
+                
+            </div>
+        </a>
+    
+    
+        <a href="/2020/10/09/Java/Security/security-jwt.html" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">下一篇</strong>
+            <div class="article-nav-title">整合JWT授权RestAPI</div>
+        </a>
+    
+</nav>
+
+
+
+
+
+    
+    
+
+
+
+
+<!-- baidu url auto push script -->
+<script type="text/javascript">
+    !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=window.location.href,o=document.referrer;if(!e.test(r)){var n="//api.share.baidu.com/s.gif";o?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var t=new Image;t.src=n}}(window);
+</script>     
+</section>
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            edurtio &copy; 2020 
+            <a rel="license noopener" href="http://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-nd/4.0/80x15.png" /></a>
+            <br> Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. Theme - <a href="https://github.com/zthxxx/hexo-theme-Wikitten" target="_blank" rel="noopener">wikitten</a>
+            . Author - <a href="https://github.com/EdurtIO" target="_blank" rel="noopener">EdurtIO</a>
+            
+                <br>
+                <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i> <span id="busuanzi_value_site_pv"></span></span>
+                &nbsp;|&nbsp;
+                <span id="busuanzi_container_site_pv"><i class="fa fa-user"></i> <span id="busuanzi_value_site_uv"></span></span>
+            
+        </div>
+    </div>
+</footer>
+
+        
+
+    
+        
+<script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-share.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-video.min.js"></script>
+
+    
+    
+        
+<script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+
+    
+    
+        <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true,
+            TeX: {
+                equationNumbers: {
+                  autoNumber: 'AMS'
+                }
+            }
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+
+
+<!-- Custom Scripts -->
+
+<script src="/js/main.js"></script>
+
+
+    </div>
+</body>
+</html>
